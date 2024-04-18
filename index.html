@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>퀘스트 메모장</title>
+    <style>
+	
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        label {
+            font-weight: bold;
+        }
+        input[type="text"], select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            box-sizing: border-box;
+        }
+        button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+        .checkbox-label {
+            display: inline-block;
+            margin-right: 0px;
+        }
+		
+
+		
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 style="text-align: center;">퀘스트 메모장</h1>
+
+        <div id="inputForm">
+            <label for="location">지역</label>
+            <select id="location">
+                <option value="미지정">지역선택</option>
+                <option value="세관">세관</option>
+                <option value="공장">공장</option>
+                <option value="그-제">그라운드제로</option>
+                <option value="인-체">인터체인지</option>
+                <option value="등대">등대</option>
+                <option value="리저브">리저브</option>
+                <option value="해안선">해안선</option>
+                <option value="시내">시내</option>
+                <option value="연구소">연구소</option>
+                <option value="삼림">삼림</option>
+            </select>
+
+            <label for="quest">퀘스트</label>
+            <input type="text" id="quest" maxlength="30">
+			
+            <label for="content">내용</label>
+            <textarea id="content" maxlength="120"></textarea>
+
+
+			<label class="checkbox-label" for="key">열쇠</label>
+            <input type="checkbox" id="key">　　　
+			
+            <label class="checkbox-label" for="install">설치</label>
+            <input type="checkbox" id="install">　　　
+			
+            <label class="checkbox-label" for="pickup">줍기</label>
+            <input type="checkbox" id="pickup">　　　
+			
+            <label class="checkbox-label" for="step">밟기</label>
+            <input type="checkbox" id="step">　　　
+			
+            <label class="checkbox-label" for="escape">탈출</label>
+            <input type="checkbox" id="escape">　　　
+			
+            <label class="checkbox-label" for="capture">KILL</label>
+            <input type="checkbox" id="capture">　　　　　　<br><br>
+
+            <button onclick="addQuest()">추가</button><br>
+        </div>
+<br>
+        <table id="questTable">
+            <tr>
+                <th>지역</th>
+                <th>퀘스트</th>
+                <th>내용</th>
+                <th>열쇠</th>
+                <th>설치</th>
+                <th>줍기</th>
+                <th>밟기</th>
+                <th>탈출</th>
+                <th>KILL</th>
+                <th>삭제</th>
+            </tr>
+        </table>
+    </div>
+
+<script>
+    // 추가 퀘스트 개수를 세는 변수
+    let questCount = 0;
+
+    function addQuest() {
+        const location = document.getElementById('location').value;
+        const quest = document.getElementById('quest').value;
+        const content = document.getElementById('content').value;
+        const key = document.getElementById('key').checked;
+        const install = document.getElementById('install').checked;
+        const pickup = document.getElementById('pickup').checked;
+        const step = document.getElementById('step').checked;
+        const escape = document.getElementById('escape').checked;
+        const capture = document.getElementById('capture').checked;
+
+        const table = document.getElementById('questTable');
+
+        // 최대 10개의 퀘스트만 추가할 수 있도록 제한
+        if (questCount < 10) {
+            const newRow = table.insertRow(-1);
+            newRow.innerHTML = `
+                <td>${location}</td>
+                <td>${quest}</td>
+                <td>${content}</td>
+                <td>${key ? '✓' : '-'}</td>
+                <td>${install ? '✓' : '-'}</td>
+                <td>${pickup ? '✓' : '-'}</td>
+                <td>${step ? '✓' : '-'}</td>
+                <td>${escape ? '✓' : '-'}</td>
+                <td>${capture ? '✓' : '-'}</td>
+                <td><button onclick="deleteRow(this)">X</button></td>
+            `;
+            
+            // 추가 퀘스트 개수 증가
+            questCount++;
+
+            // Clear input fields after adding
+            document.getElementById('quest').value = '';
+            document.getElementById('content').value = '';
+            document.getElementById('key').checked = false;
+            document.getElementById('install').checked = false;
+            document.getElementById('pickup').checked = false;
+            document.getElementById('step').checked = false;
+            document.getElementById('escape').checked = false;
+            document.getElementById('capture').checked = false;
+        } else {
+            alert('퀘스트는 최대 10개까지만 추가할 수 있습니다.');
+        }
+    }
+
+    function deleteRow(btn) {
+        const row = btn.parentNode.parentNode;
+        row.parentNode.removeChild(row);
+
+        // 삭제된 퀘스트 개수 감소
+        questCount--;
+    }
+</script>
+</body>
+</html>
